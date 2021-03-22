@@ -1,0 +1,46 @@
+<%- include('../partials/header.ejs')%>
+<%- include('../partials/navbar.ejs')%>
+<body>
+    <div class="container">
+        <h1>Services</h1>
+        <hr>
+        <a href="/services/add" class="btn btn-primary">Add service</a>
+        <hr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Description</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% data.Items.forEach(function(item) { %>
+                    <tr>
+                        <td><%= item.service%></td>
+                        <td><%= item.description%></td>
+                        <td><%= item.durationMinutes%></td>
+                        <td>
+                            <form method="POST" action="/services/delete" style="display: inline;" onsubmit="confirmDelete(event,this);">
+                                <input type="hidden" name="serviceId" value="<%= item.serviceId%>">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                            <a href="/services/edit/<%= item.serviceId%>" class="btn btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+    </div>
+</body>
+<%- include('../partials/footer.ejs')%>
+<script>
+    function confirmDelete(event,form) {
+        event.preventDefault();
+        //console.log("O form não foi enviado!");
+        var decision=confirm("Are you sure you want to delete this Service?");
+        if (decision) {
+            form.submit();
+        }
+    }
+</script>

@@ -1,0 +1,27 @@
+<%- include('../partials/header.ejs')%>
+<%- include('../partials/navbar.ejs')%>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Edit Service</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/services/update">
+                    <label>Service</label>
+                    <input class="form-control" type="input" name="service" value="<%= data.Items[0].service %>">
+                    <br>
+                    <label>Description</label>
+                    <input class="form-control" type="input" name="description" value="<%= data.Items[0].description %>">
+                    <br>
+                    <label>Duration</label>
+                    <input class="form-control" type="number" name="durationMinutes" value="<%= data.Items[0].durationMinutes %>">
+                    <br>
+                    <input class="form-control" type="hidden" name="serviceId" value="<%= data.Items[0].serviceId %>">
+                    <button class="btn btn-primary">Edit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<%- include('../partials/footer.ejs')%>
