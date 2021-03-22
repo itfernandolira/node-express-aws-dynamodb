@@ -5,7 +5,7 @@ const router=express.Router();
 router.get("/api/services",(req,res)=>{
     var params = {
         TableName: "Services",
-        ProjectionExpression: "serviceId, service, description, entityId, durationMinutes"
+        ProjectionExpression: "serviceId, service, description, entityId, durationMinutes, filePic"
     };
     docClient.scan(params, onScan);
     function onScan(err, data) {

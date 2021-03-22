@@ -7,7 +7,7 @@
                 <h2>Add Service</h2>
             </div>
             <div class="card-body">
-                <form method="POST" action="/services/save">
+                <form method="POST" action="/services/save" enctype="multipart/form-data">
                     <label>Service</label>
                     <input class="form-control" type="input" name="service" placeholder="Add service">
                     <br>
@@ -17,7 +17,10 @@
                     <label>Duration</label>
                     <input class="form-control" type="number" name="duration" placeholder="How long it takes in minutes">
                     <br>
-                    <button class="btn btn-primary">Add</button>
+                    <label>Select picture:</label>
+                    <input type="file" name="filePic" />
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Add">
                 </form>
             </div>
         </div>

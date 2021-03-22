@@ -3,6 +3,19 @@ const docClient = require("../database/docClient");
 const router=express.Router();
 const { v4: uuidv4 } = require('uuid');
 const adminAuth=require("../middlewares/adminAuth");
+var multer  = require('multer');
+const path = require('path');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now()+ path.extname(file.originalname));
+    }
+  });
+
+var upload = multer({ storage: storage })
 
 router.get("/services",adminAuth,(req,res)=>{
     var params = {
@@ -24,11 +37,12 @@ router.get("/services/add",adminAuth,(req,res)=>{
     res.render("services/add");
 });
 
-router.post("/services/save",adminAuth,(req,res)=>{
+router.post("/services/save",upload.single('filePic'),adminAuth,(req,res,next)=>{
     var service=req.body.service;
     var description=req.body.description;
     var duration=req.body.duration;
-  
+    var filePic=req.file.filename;
+
     if (service!=undefined){
         var params = {
             TableName:"Services",
@@ -37,7 +51,8 @@ router.post("/services/save",adminAuth,(req,res)=>{
                 "entityId": "test",
                 "service": service,
                 "description": description,
-                "durationMinutes": duration
+                "durationMinutes": duration,
+                "filePic": filePic
             }
         };
         docClient.put(params, function(err, data) {
@@ -104,11 +119,12 @@ router.get("/services/edit/:serviceId",adminAuth,(req,res) => {
     }
 });
 
-router.post("/services/update",adminAuth,(req,res)=> {
+router.post("/services/update",upload.single('filePic'),adminAuth,(req,res,next)=> {
     var service=req.body.service;
     var description=req.body.description;
     var durationMinutes=req.body.durationMinutes;
     var serviceId=req.body.serviceId;
+    var filePic=req.file.filename;
 
     var params = {
         TableName:"Services",
@@ -116,13 +132,14 @@ router.post("/services/update",adminAuth,(req,res)=> {
             "serviceId": serviceId,
             "entityId": "test"
         },
-        UpdateExpression: "set service = :service, description=:description, durationMinutes=:durationMinutes",
+        UpdateExpression: "set service = :service, description=:description, durationMinutes=:durationMinutes, filePic=:filePic",
         ConditionExpression: "serviceId = :serviceId",
         ExpressionAttributeValues:{
             ":service":service,
             ":description":description,
             ":durationMinutes":durationMinutes,
-            ":serviceId":serviceId
+            ":serviceId":serviceId,
+            ":filePic":filePic
         },
         ReturnValues:"UPDATED_NEW"
     };
