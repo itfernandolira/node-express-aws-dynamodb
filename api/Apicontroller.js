@@ -13,7 +13,8 @@ router.get("/api/services",(req,res)=>{
             console.error("Unable to scan the table. Error JSON:", JSON.stringify(err, null, 2));
         } else {
             //console.log(data);
-            res.json(data);
+            res.status(200);
+            res.json (data.Items);
         }
     }
 });
